@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>我是App</h1>
+    <h1>测试svg</h1>
+    <SavIcon name="phone" color="red" ></SavIcon>
+    <Pagination></Pagination>
   </div>
 </template>
 
