@@ -1,15 +1,18 @@
 <template>
   <div>
-    <h1>测试svg</h1>
-    <SavIcon name="phone" color="red" ></SavIcon>
-    <Pagination></Pagination>
+    <h1>App根目录</h1>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { onMounted } from 'vue';
+  import {reqLogin} from './api/user';
 
+  onMounted(()=>{
+    reqLogin({username:'admin',password:'111111'})
+  })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>

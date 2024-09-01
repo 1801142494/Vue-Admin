@@ -20,5 +20,8 @@ import 'virtual:svg-icons-register'
 import globalComponent from '@/components'
 // 安装自定义插件
 app.use(globalComponent);
+// 引入模板的全局样式
+import './styles/index.scss'
+
 // 挂载应用
 app.mount('#app')
