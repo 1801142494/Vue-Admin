@@ -9,7 +9,6 @@ export interface loginFormData {
 export interface ResponseData {
   code: number
   message: string
-  ok: boolean
 }
 
 //定义登录接口返回数据类型

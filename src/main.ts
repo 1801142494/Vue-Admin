@@ -14,6 +14,8 @@ import 'virtual:svg-icons-register'
 import globalComponent from '@/components'
 //引入路由
 import router from './router/index'
+// 引入仓库
+import pinia from './store'
 
 // 获取应用实例应用对象
 const app = createApp(App)
@@ -22,9 +24,10 @@ app.use(ElementPlus, {
   // 设置中文
   locale: zhCn,
 })
-
 // 安装自定义插件
 app.use(globalComponent)
+// 安装仓库
+app.use(pinia)
 // 注册模板路由
 app.use(router)
 // 挂载应用
