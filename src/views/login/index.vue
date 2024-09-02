@@ -3,13 +3,13 @@
     <el-row>
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login_form" :model="loginForm" :rules="rules">
+        <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginForms">
             <h1>Hello</h1>
             <h2>欢迎来到后台管理系统</h2>
-            <el-form-item porp="username">
+            <el-form-item prop="username">
                 <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
             </el-form-item>
-            <el-form-item porp="password">
+            <el-form-item prop="password">
                 <el-input type="password" :prefix-icon="Lock" show-password v-model="loginForm.password"></el-input>
             </el-form-item>
             <el-form-item>
@@ -36,10 +36,14 @@
     //数据
     let loginForm=reactive({username:'admin',password:'111111'})
     let isLoading=ref(false)
+    // 获取el-form组件
+    let loginForms =ref()
     //获取路由器实例
     let $route =useRouter();
     // 登录的按钮回调
     const login=async ()=>{
+        // 保证表单全部校验后再发请求
+        await loginForms.value.validate()
         //登录按钮加载状态
         isLoading.value=true
         //点击登录后
@@ -69,12 +73,40 @@
             isLoading.value=false
         }
     }
+    // 自定义表单验证
+    const validateUsername =(rule: any, value: any, callback: any)=>{
+        if (value === '') {
+            callback(new Error('输入不能为空'))
+        }
+        if (value.length >= 5) {
+            callback()
+        }else{
+            callback(new Error('账号长度至少五位'))
+        }
+    }
+    const validatePassword =(rule: any, value: any, callback: any)=>{
+        if (value === '') {
+            callback(new Error('输入不能为空'))
+        }
+        if (value.length >= 6) {
+            callback()
+        }else{
+            callback(new Error('密码长度至少六位'))
+        }
+    }
     // 定义表单验证配置对象
     const rules={
-        username:[
-            { required: true, message: '用户名不能为空', trigger: 'change' },
+        username: [
+            // 规则对象属性：
+            // required，这个字段必须校验
+            // min,max长度限制
+            // message，信息提示
+            // trigger 触发校验的时机
+            { validator: validateUsername, trigger: 'blur' }
         ],
-        password:[]
+        password:[
+            { validator: validatePassword, trigger: 'blur' }
+        ]
     }
 </script>
 
