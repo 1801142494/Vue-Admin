@@ -1,2 +1,15 @@
 //引入默认清除样式
-@import './reset.scss'
+@import './reset.scss';
+
+// 滚动条样式
+::-webkit-scrollbar{
+    width: 10px;
+}
+::-webkit-scrollbar-track{
+    background: $base-menu-background;
+}
+::-webkit-scrollbar-thumb{
+    width: 10px;
+    border-radius: 10px;
+    background-color: yellowgreen;
+}
