@@ -7,7 +7,8 @@ export const constantRoute=[
         component:()=>import('@/views/login/index.vue'),
         meta:{
             title:'登录',
-            hidden:true //是否隐藏， 隐藏为true
+            hidden:false, //是否隐藏， 隐藏为true
+            icon:'Promotion'
         }
     },
     {
@@ -17,7 +18,8 @@ export const constantRoute=[
         component:()=>import('@/layout/index.vue'),
         meta:{
             title:'layout',
-            hidden:false
+            hidden:false,
+            icon:'Avatar'
             
         },
         children:[
@@ -26,15 +28,17 @@ export const constantRoute=[
                 component:()=> import('@/views/home/index.vue'),
                 meta:{
                     title:'首页',
-                    hidden:false
+                    hidden:false,
+                    icon:'HomeFilled'
                 }
             },
             {
-                path:'/ceshi',
+                path:'/home',
                 component:()=> import('@/views/home/index.vue'),
                 meta:{
                     title:'测试',
-                    hidden:false
+                    hidden:false,
+                    icon:'Histogram'
                 }
             }
         ],
@@ -46,7 +50,8 @@ export const constantRoute=[
         component:()=>import('@/views/404/index.vue'),
         meta:{
             title:'404',
-            hidden:true
+            hidden:false,
+            icon:'WarnTriangleFilled'
         }
     },
     {
@@ -56,7 +61,8 @@ export const constantRoute=[
         redirect:'/404',
         meta:{
             title:'任意路由',
-            hidden:true
+            hidden:false,
+            icon:'Notification'
         }
     }
 
