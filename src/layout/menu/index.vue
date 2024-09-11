@@ -41,11 +41,15 @@
 </template>
 
 <script setup lang='ts'>
+// 引入路由
+import { useRouter } from 'vue-router';
+const $router =useRouter();
 //获取父组件传递过来的全部路由数组
 defineProps(['menuList'])
 // 点击菜单的回调
 const goRoute=(vc:any)=>{
-    console.log(vc);
+    //编程式路由跳转
+    $router.push(vc.index)
 }
 </script> 
 

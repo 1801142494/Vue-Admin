@@ -16,7 +16,9 @@
         <!-- 顶部导航 -->
         <div class="layout_tabbar">456</div>
         <!-- 内容展示区 -->
-        <div class="layout_main">789</div>
+        <div class="layout_main">
+            <Main></Main>
+        </div>
     </div>
 </template>
 
@@ -25,6 +27,8 @@
 import Logo from './logo/index.vue'
 // 引入菜单组件
 import Menu from './menu/index.vue'
+// 右侧内容展示区
+import Main from './main/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user';
 let userStore=useUserStore()
@@ -35,7 +39,6 @@ let userStore=useUserStore()
         width: 100%;
         height: 100vh;
         background-color: skyblue;
-        color: white;
         .layout_slider{
             width: $base-menu-width;
             height: 100vh;

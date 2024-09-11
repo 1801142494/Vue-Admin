@@ -1,3 +1,4 @@
+
 //对外暴露配置路由（常量路由）
 export const constantRoute=[
     {
@@ -7,7 +8,7 @@ export const constantRoute=[
         component:()=>import('@/views/login/index.vue'),
         meta:{
             title:'登录',
-            hidden:false, //是否隐藏， 隐藏为true
+            hidden:true, //是否隐藏， 隐藏为true
             icon:'Promotion'
         }
     },
@@ -22,6 +23,7 @@ export const constantRoute=[
             icon:'Avatar'
             
         },
+        redirect:'/home',
         children:[
             {
                 path:'/home',
@@ -31,17 +33,113 @@ export const constantRoute=[
                     hidden:false,
                     icon:'HomeFilled'
                 }
-            },
-            {
-                path:'/home',
-                component:()=> import('@/views/home/index.vue'),
-                meta:{
-                    title:'测试',
-                    hidden:false,
-                    icon:'Histogram'
-                }
             }
         ],
+    },
+    {
+        name:'Screen',
+        path:'/screen',
+        component:()=>import('@/views/screen/index.vue'),
+        meta:{
+            hidden:false,
+            title:"数据大屏",
+            icon:'Platform'
+        }
+    },
+    {
+        name:'Acl',
+        path:'/acl',
+        component:()=>import('@/layout/index.vue'),
+        meta:{
+            hidden:false,
+            title:"权限管理",
+            icon:'Lock'
+        },
+        children:[
+            {
+                name:'Acl',
+                path:'/acl/user',
+                component:()=>import('@/views/acl/user/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"用户管理",
+                    icon:'User'
+                }
+            },
+            {
+                name:'Role',
+                path:'/acl/role',
+                component:()=>import('@/views/acl/role/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"角色管理",
+                    icon:'UserFilled'
+                },
+            },
+            {
+                name:'Permission',
+                path:'/acl/permission',
+                component:()=>import('@/views/acl/permission/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"菜单管理",
+                    icon:'Monitor'
+                },
+            }
+        ]
+    },
+    {
+        name:'Product',
+        path:'/product',
+        component:()=>import('@/layout/index.vue'),
+        meta:{
+            hidden:false,
+            title:"商品管理",
+            icon:'Goods'
+        },
+        children:[
+            {
+                name:'Trademark',
+                path:'/product/trademark',
+                component:()=>import('@/views/product/trademark/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"品牌管理",
+                    icon:'ShoppingCartFull'
+                }
+            },
+            {
+                name:'Attr',
+                path:'/product/attr',
+                component:()=>import('@/views/product/attr/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"属性管理",
+                    icon:'ChromeFilled'
+                }
+            },
+            {
+                name:'Spu',
+                path:'/product/spu',
+                component:()=>import('@/views/product/spu/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"SPU管理",
+                    icon:'Calendar'
+                }
+            },
+            {
+                name:'Sku',
+                path:'/product/sku',
+                component:()=>import('@/views/product/sku/index.vue'),
+                meta:{
+                    hidden:false,
+                    title:"SKU管理",
+                    icon:'Orange'
+                }
+            }
+            
+        ]
     },
     {
         // 404页面
@@ -50,7 +148,7 @@ export const constantRoute=[
         component:()=>import('@/views/404/index.vue'),
         meta:{
             title:'404',
-            hidden:false,
+            hidden:true,
             icon:'WarnTriangleFilled'
         }
     },
@@ -61,9 +159,8 @@ export const constantRoute=[
         redirect:'/404',
         meta:{
             title:'任意路由',
-            hidden:false,
+            hidden:true,
             icon:'Notification'
         }
     }
-
 ]
