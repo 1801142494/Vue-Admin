@@ -8,13 +8,13 @@ const allGlobalComponent = { SavIcon, Pagination }
 
 //对外暴露插件对象
 export default {
-    install(app:any) {
-        Object.keys(allGlobalComponent).forEach(key => {
-            app.component(key, allGlobalComponent[key]);
-        });
-        // 注册ElementPlus的所有的图标为全局组件
-        for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-            app.component(key, component)
-        }
+  install(app: any) {
+    Object.keys(allGlobalComponent).forEach((key) => {
+      app.component(key, allGlobalComponent[key])
+    })
+    // 注册ElementPlus的所有的图标为全局组件
+    for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+      app.component(key, component)
     }
+  },
 }
