@@ -1,14 +1,16 @@
 <template>
     <div class="layout_container">
         <!-- 左侧菜单 -->
-        <div class="layout_slider">
+        <div class="layout_slider" :class="{fold:LayoutSettingStore.fold}">
             <Logo></Logo>
             <!-- 展示菜单 -->
             <!-- 滚动组件 -->
             <el-scrollbar class="scrollbar">
                 <!-- 菜单组件 -->
-                 <el-menu background-color="$base-menu-background" text-color="white" 
+                 <el-menu background-color="#001529"
+                  text-color="white"
                  :default-active="$route.path"
+                 :collapse="LayoutSettingStore.fold"
                  active-text-color="yellowgreen">
                     <!-- 根据路由动态生成菜单 -->
                     <Menu :menuList="userStore.menuRoutes"></Menu>
@@ -16,12 +18,12 @@
             </el-scrollbar>
         </div>
         <!-- 顶部导航 -->
-        <div class="layout_tabbar">
+        <div class="layout_tabbar" :class="{fold:LayoutSettingStore.fold}">
             <!-- 顶部导航tabbar组件 -->
             <Tabbar></Tabbar>
         </div>
         <!-- 内容展示区 -->
-        <div class="layout_main">
+        <div class="layout_main" :class="{fold:LayoutSettingStore.fold}">
             <Main></Main>
         </div>
     </div>
@@ -40,23 +42,37 @@ import Main from './main/index.vue'
 import Tabbar from './tabbar/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user';
+import useLayoutSettingStore from '@/store/modules/setting';
+// 获取layout配置相关的仓库
+let LayoutSettingStore=useLayoutSettingStore()
 let userStore=useUserStore()
 const $route=useRoute();
 </script>
 
+<script lang="ts">
+    export default {
+        name:'Layout'
+    }
+</script>
 <style scoped lang="scss">
     .layout_container{
         width: 100%;
         height: 100vh;
+
         .layout_slider{
             width: $base-menu-width;
             height: 100vh;
+            transition: all 0.3s;
             background: $base-menu-background;
             .scrollbar{
                 height: calc(100vh - $base-menu-logo-height);
                 .el-menu{
                     border-right: none;
                 }
+            }
+
+            &.fold{
+                width: $base-menu-min-width;
             }
         }
         .layout_tabbar{
@@ -65,6 +81,12 @@ const $route=useRoute();
             left: $base-menu-width;
             width: calc(100% - $base-menu-width);
             height: $base-tabbar-height;
+            transition: all 0.3s;
+
+            &.fold{
+                width: calc(100% - $base-menu-min-width);
+                left: $base-menu-min-width;
+            }
         }
         .layout_main{
             position: absolute;
@@ -75,6 +97,12 @@ const $route=useRoute();
             background: orchid;
             padding: 20px;
             overflow: auto;
+            transition: all 0.3s;
+
+            &.fold{
+                width: calc(100% - $base-menu-min-width);
+                left: $base-menu-min-width;
+            }
         }
     }
 </style>
