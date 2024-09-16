@@ -26,12 +26,14 @@
     import { reactive,ref } from 'vue';
     // 引入用户相关小仓库
     import useUserStore from '@/store/modules/user';
-    // 引入路由器
-    import { useRouter } from 'vue-router';
+    // 引入路由器和路由
+    import { useRouter,useRoute } from 'vue-router';
     // 引入element-plus 
     import { ElNotification } from 'element-plus';
     // 引入获取当前时间的函数
     import { getTime } from '@/utils/time';
+    // 路由对象
+    let $route =useRoute()
     let useStore =useUserStore()
     //数据
     let loginForm=reactive({username:'admin',password:'111111'})
@@ -39,7 +41,7 @@
     // 获取el-form组件
     let loginForms =ref()
     //获取路由器实例
-    let $route =useRouter();
+    let $router =useRouter();
     // 登录的按钮回调
     const login=async ()=>{
         // 保证表单全部校验后再发请求
@@ -54,7 +56,9 @@
             //保证登录成功
             await useStore.userLogin(loginForm)
             // 通过编程式路由跳到首页
-            $route.push('/')
+            // 判断登录的时候，路径是否携带query
+            let redirect:any =$route.query.redirect
+            $router.push({path:redirect||'/'})
             // 登录成功提示信息
             ElNotification({
                 type:'success',
