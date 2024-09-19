@@ -30,5 +30,7 @@ app.use(globalComponent)
 app.use(pinia)
 // 注册模板路由
 app.use(router)
+// 引入路由鉴权
+import './permisstion.ts'
 // 挂载应用
 app.mount('#app')

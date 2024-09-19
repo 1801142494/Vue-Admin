@@ -12,10 +12,10 @@ const request = axios.create({
 // 第二步：添加请求拦截器
 request.interceptors.request.use((config) => {
   // 获取用户仓库中的token，登录成功后携带给服务器
-  let userStore=useUserStore();
+  const userStore = useUserStore()
 
-  if(userStore.token){
-    config.headers.token=userStore.token
+  if (userStore.token) {
+    config.headers.token = userStore.token
   }
   // config配置对象，headers属性请求头，用于给服务端携带公共参数
   // 返回配置对象

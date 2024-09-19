@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-export default{
+export default {
     name:'Tabbar'
 }
 </script>
@@ -33,7 +33,7 @@ export default{
     .tabbar_right{
         display: flex;
         align-items: center;
-        margin-right: 10px;
+        margin-right: 20px;
     }
 }
 </style>
