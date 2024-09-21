@@ -46,7 +46,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
           // 用户手动修改token
 
           // 用户退出->清除相关数据
-          userStore.userLogout()
+          await userStore.userLogout()
           next({ path: '/login', query: { redirect: to.path } })
         }
       }

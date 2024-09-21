@@ -51,11 +51,11 @@ const fullScreen=()=>{
     }
 }
 // 退出登录点击回调
-const logout=()=>{
+const logout=async ()=>{
     // 第一件事：向服务器发送请求
     // 第二件事：清除仓库当中关于用户相关的数据
     // 第三件事：跳转到登录页面
-    userStore.userLogout();
+    await userStore.userLogout();
     $router.push({path:'/login',query:{redirect:$route.path}})
 }
 </script>

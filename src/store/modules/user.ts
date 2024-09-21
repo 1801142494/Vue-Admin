@@ -1,7 +1,7 @@
 //创建用户相关小仓库
 import { defineStore } from 'pinia'
 // 引入接口
-import { reqLogin, reqUserInfo } from '@/api/user'
+import { reqLogin, reqUserInfo,reqLogout } from '@/api/user'
 // 引入数据类型
 import type { loginFormData, loginResponseData } from '@/api/user/type'
 import type { UserState } from './types/type'
@@ -28,12 +28,13 @@ const useUserStore = defineStore('User', {
       if (result.code == 200) {
         // pinia仓库存储token
         // pinia|vuex存储数据其实是利用js对象
-        this.token = result.data.token as string
+        console.log(result);
+        this.token = result.data
         // 本地存储持久化
-        SET_TOKEN(result.data.token as string)
+        SET_TOKEN(result.data)
         return 'ok'
       } else {
-        return Promise.reject(new Error(result.data.message))
+        return Promise.reject(new Error(result.data))
       }
     },
     // 获取用户信息的方法
@@ -42,20 +43,26 @@ const useUserStore = defineStore('User', {
       const result = await reqUserInfo()
       // 如果获取用户信息成功，就存储信息
       if (result.code == 200) {
-        this.username = result.data.checkUser.username
-        this.avatar = result.data.checkUser.avatar
+        this.username = result.data.name
+        this.avatar = result.data.avatar
         return 'ok'
       } else {
-        return Promise.reject('获取信息失败')
+        return Promise.reject(new Error(result.message))
       }
     },
     // 退出登录的方法
-    userLogout() {
-      // 目前没用mock接口：退出登录
-      this.token = ''
-      this.username = ''
-      this.avatar = ''
-      REMOVE_TOKEN() //清除本地存储的token
+    async userLogout() {
+      // 退出登录的请求
+      let result=await reqLogout()
+      if(result.code==200){
+        this.token = ''
+        this.username = ''
+        this.avatar = ''
+        REMOVE_TOKEN() //清除本地存储的token
+        return 'ok'
+      }else{
+        return Promise.reject(new Error(result.message))
+      }
     },
   },
   getters: {},
