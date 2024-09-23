@@ -1,7 +1,7 @@
 //创建用户相关小仓库
 import { defineStore } from 'pinia'
 // 引入接口
-import { reqLogin, reqUserInfo,reqLogout } from '@/api/user'
+import { reqLogin, reqUserInfo, reqLogout } from '@/api/user'
 // 引入数据类型
 import type { loginFormData, loginResponseData } from '@/api/user/type'
 import type { UserState } from './types/type'
@@ -28,7 +28,7 @@ const useUserStore = defineStore('User', {
       if (result.code == 200) {
         // pinia仓库存储token
         // pinia|vuex存储数据其实是利用js对象
-        console.log(result);
+        console.log(result)
         this.token = result.data
         // 本地存储持久化
         SET_TOKEN(result.data)
@@ -53,14 +53,14 @@ const useUserStore = defineStore('User', {
     // 退出登录的方法
     async userLogout() {
       // 退出登录的请求
-      let result=await reqLogout()
-      if(result.code==200){
+      const result = await reqLogout()
+      if (result.code == 200) {
         this.token = ''
         this.username = ''
         this.avatar = ''
         REMOVE_TOKEN() //清除本地存储的token
         return 'ok'
-      }else{
+      } else {
         return Promise.reject(new Error(result.message))
       }
     },
