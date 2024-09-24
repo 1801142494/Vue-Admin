@@ -20,15 +20,12 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
 import useLayoutSettingStore from '@/store/modules/setting';
 // 获取路由
 import {useRoute} from 'vue-router'
 let $router =useRoute();
 // 获取layout配置相关的仓库
 let LayoutSettingStore=useLayoutSettingStore()
-// 定义响应式数据控制图标切换
-let fold=ref(false)
 // 点击图标的方法
 const changeIcon =()=>{
     // 图标切换
