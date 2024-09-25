@@ -177,8 +177,6 @@ const getHasTrademark =async (pager=1)=>{
                 element.logoUrl='http://'+element.logoUrl
             }
         });
-    }else{
-       
     }
 }
 // 组件挂载生命周期钩子
