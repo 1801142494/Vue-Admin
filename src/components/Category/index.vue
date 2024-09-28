@@ -2,20 +2,20 @@
     <el-card>
         <el-form :inline="true">
             <el-form-item label="一级标题">
-                <!-- change:选中值变化的时候调用,scene：当添加或修改属性时分类不可选 -->
-                <el-select :disabled="!scene" v-model="catgoryStore.c1Id" @change="handlerC1">
+                <!-- change:选中值变化的时候调用,scene：控制是否可选 -->
+                <el-select :disabled="scene" v-model="catgoryStore.c1Id" @change="handlerC1">
                     <!-- label:是展示的数据，value:是下拉框收集的数据 -->
                     <el-option v-for="c1 in catgoryStore.c1Arr" :key="c1.id" :label="c1.name" :value="c1.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="二级标题">
-                <el-select :disabled="!scene" v-model="catgoryStore.c2Id" @change="handlerC2">
+                <el-select :disabled="scene" v-model="catgoryStore.c2Id" @change="handlerC2">
                     <!-- label:是展示的数据，value:是下拉框收集的数据 -->
                     <el-option v-for="c2 in catgoryStore.c2Arr" :key="c2.id" :label="c2.name" :value="c2.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="三级标题">
-                <el-select :disabled="!scene" v-model="catgoryStore.c3Id">
+                <el-select :disabled="scene" v-model="catgoryStore.c3Id">
                     <!-- label:是展示的数据，value:是下拉框收集的数据 -->
                     <el-option v-for="c3 in catgoryStore.c3Arr" :key="c3.id" :label="c3.name" :value="c3.id"></el-option>
                 </el-select>

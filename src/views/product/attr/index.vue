@@ -3,7 +3,7 @@
         <!-- 三级分类全局组件 -->
         <Category :scene="scene"/>
         <!-- scene控制场景切换(展示已有属性或修改添加) -->
-        <template v-if="scene">
+        <template v-if="!scene">
             <el-card style="margin-top: 10px;">
             <!-- 当3级分类存在，才可以操作添加 -->
             <el-button type="primary" size="default" @click="addAttr" :disabled="!catgoryStore.c3Id">添加属性</el-button>
@@ -72,7 +72,7 @@ let catgoryStore=useCatgoryStore()
 // 存储已有属性和属性值
 let attrArr =ref<Attr[]>([])
 // 控制下方卡片切换
-let scene =ref(true)
+let scene =ref(0) //0:展示已有属性 | 1：修改或添加属性
 // 收集新增的属性的数据
 let attrParams=reactive<Attr>({
     attrName:'',//新增的属性值
@@ -110,11 +110,11 @@ const addAttr=()=>{
         categoryLevel:3,
     })
     // 切换场景
-    scene.value=false
+    scene.value=1
 }
 // 修改属性
 const updateAttr=async (row:Attr)=>{
-    scene.value=false
+    scene.value=1
     // 展示已有属性(这里要深拷贝)
     Object.assign(attrParams,JSON.parse(JSON.stringify(row)))
     // 发送修改数据的网络请求
@@ -122,7 +122,7 @@ const updateAttr=async (row:Attr)=>{
 }
 //取消修改或添加
 const cancel=()=>{
-    scene.value=true
+    scene.value=0
 }
 // 添加属性值
 const addAttrValue=()=>{
@@ -138,27 +138,18 @@ const addAttrValue=()=>{
 }
 // 保存按钮
 const save=async ()=>{
-    // 检测合法性，不能为空
-    // attrParams.attrValueList.forEach(item=>{
-    //     if(item.valueName.trim()==''){
-    //         // 提示信息
-    //         ElMessage({
-    //             type:'error',
-    //             message:'属性值不能为空'
-    //         })
-    //         return
-    //     }
-    // })
     // 发送请求
     let result:any= await reqAddOrUpdateAttr(attrParams)
     if(result.code==200){
         //切换场景
-        scene.value=true
+        scene.value=0
         // 提示信息
         ElMessage({
             type:'success',
             message:attrParams.id?'修改成功':'添加成功'
         })
+        //获取已有属性,刷新页面
+        getAttr()
     }else{
         ElMessage({
             type:'error',
@@ -210,6 +201,7 @@ const toEdit=(row:AttrValue,$index:number)=>{
 }
 // 删除已有属性气泡的事件回调
 const deleteAttr=async (row:Attr)=>{
+
     let result=await reqDeleteAttr(row.id)
     if(result.code==200){
         ElMessage({
