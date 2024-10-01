@@ -48,7 +48,7 @@ export interface SpuImg{
     imgUrl:string,
 }
 // 已有spu返回的图片墙数据ts类型
-export interface spuHasImg extends ResponseData{
+export interface SpuHasImg extends ResponseData{
     data:SpuImg[]
 }
 

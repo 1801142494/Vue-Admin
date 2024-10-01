@@ -16,7 +16,7 @@
                     <el-table-column label='SPU操作'>
                         <template #="{row,$index}">
                             <el-button type="primary" size="small" icon="Plus" title="添加SPU" @click=""></el-button>
-                            <el-button type="primary" size="small" icon="Edit"  title="修改SPU" @click="updateSpu"></el-button>
+                            <el-button type="primary" size="small" icon="Edit"  title="修改SPU" @click="updateSpu(row)"></el-button>
                             <el-button type="primary" size="small" icon="View"  title="查看SPU" @click=""></el-button>
                             <el-button type="primary" size="small" icon="Delete" title="删除SPU" @click=""></el-button>
                         </template>
@@ -34,7 +34,7 @@
                     />
             </div>
             <!-- 添加或修改已有spu -->
-            <SpuForm  v-show="scene==1" @changeScene="changeScene"></SpuForm>
+            <SpuForm ref="spu" v-show="scene==1" @changeScene="changeScene"></SpuForm>
             <!-- 添加sku -->
             <SkuForm  v-show="scene==2"></SkuForm>
         </el-card>
@@ -43,13 +43,12 @@
 
 <script setup lang='ts'>
 import { onMounted, ref, watch } from 'vue';
-import { ElMessage } from 'element-plus';
 import { reqHasSpu } from '@/api/product/spu';
 import SpuForm from './spuForm.vue';
 import SkuForm from './skuForm.vue';
 //分类相关仓库
 import useCatgoryStore from '@/store/modules/catgory';
-import type { HasSpuResponseData,Records } from '@/api/product/spu/type';
+import type { HasSpuResponseData,Records,SpuData } from '@/api/product/spu/type';
 let catgoryStore=useCatgoryStore()
 // 控制场景
 let scene =ref(0)// 0:展示已有spu|1:添加或修改spu|2:添加sku
@@ -61,6 +60,8 @@ let limit =ref<number>(3)
 let total =ref<number>(0)
 // 存储已有spu数据
 let records=ref<Records>([])
+// 获取spu子组件的实例对象
+let spu=ref<any>()
 // 获取已有spu
 const getHasSPU =async (pager=1)=>{
     // 根据点击的页码跳转到对应
@@ -76,8 +77,10 @@ const addSpu=()=>{
     scene.value=1
 }
 // 修改spu
-const updateSpu=()=>{
+const updateSpu=(row:SpuData)=>{
     scene.value=1
+    // 调用子组件的方法
+    spu.value.initGetHasSpuData(row)
 }
 // 通过自定义事件，让子组件通知父组件切换场景
 const changeScene=(num:number)=>{
