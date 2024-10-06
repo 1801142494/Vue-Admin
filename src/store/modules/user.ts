@@ -24,11 +24,11 @@ const useUserStore = defineStore('User', {
     // 用户登录的方法 async异步修饰将返回promise对象
     async userLogin(data: loginFormData) {
       const result: loginResponseData = await reqLogin(data)
+      console.log(result)
       // 请求成功
       if (result.code == 200) {
         // pinia仓库存储token
         // pinia|vuex存储数据其实是利用js对象
-        console.log(result)
         this.token = result.data
         // 本地存储持久化
         SET_TOKEN(result.data)

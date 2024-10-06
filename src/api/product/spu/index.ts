@@ -1,6 +1,6 @@
 // spu管理模块接口
 import request from "@/utils/request";
-import type { HasSpuResponseData,AllTrademark,SpuHasImg,SaleAttrResponseData,HasSaleAttrResponseData } from "./type";
+import type { HasSpuResponseData,AllTrademark,SpuHasImg,SaleAttrResponseData,HasSaleAttrResponseData, SpuData } from "./type";
 enum API{
     // 获取已有的spu
     HASSPU_URL='/admin/product/',
@@ -40,7 +40,7 @@ export const reqAllSaleAttr =()=>{
 
 // 更新spu
 // 修改spu
-export const reqAddOrUpdateSpu =(data:any)=>{
+export const reqAddOrUpdateSpu =(data:SpuData)=>{
     // 如果spu对象有id，更新已有spu
     if(data.id){
         return request.post<any,any>(API.UPDATESPU_URL,data)
