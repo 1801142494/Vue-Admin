@@ -75,6 +75,8 @@ const getHasSPU =async (pager=1)=>{
 // 添加spu
 const addSpu=()=>{
     scene.value=1
+    // 调用子组件的方法
+    spu.value.initAddSpu(catgoryStore.c3Id)
 }
 // 修改spu
 const updateSpu=(row:SpuData)=>{
@@ -83,9 +85,20 @@ const updateSpu=(row:SpuData)=>{
     spu.value.initGetHasSpuData(row)
 }
 // 通过自定义事件，让子组件通知父组件切换场景
-const changeScene=(num:number)=>{
+const changeScene=(obj:any)=>{
+    console.log(obj);
+    
     // 子组件点击取消，切换场景0
-    scene.value=num
+    scene.value=obj.flag
+    // 判断是添加还是修改操作
+    if(obj.Params=='update'){
+        // 更新，留在当前页
+        getHasSPU(pageNo.value)
+    }else{
+        // 添加，留在第一页
+        getHasSPU()
+    }
+   
 }
 // 监听三级分类ID变化
 watch(()=>catgoryStore.c3Id,()=>{
