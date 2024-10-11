@@ -15,7 +15,7 @@
                     <el-table-column label='SPU描述' prop="description" show-overflow-tooltip></el-table-column>
                     <el-table-column label='SPU操作'>
                         <template #="{row,$index}">
-                            <el-button type="primary" size="small" icon="Plus" title="添加SPU" @click=""></el-button>
+                            <el-button type="primary" size="small" icon="Plus" title="添加SKU" @click="addSku(row)"></el-button>
                             <el-button type="primary" size="small" icon="Edit"  title="修改SPU" @click="updateSpu(row)"></el-button>
                             <el-button type="primary" size="small" icon="View"  title="查看SPU" @click=""></el-button>
                             <el-button type="primary" size="small" icon="Delete" title="删除SPU" @click=""></el-button>
@@ -36,7 +36,7 @@
             <!-- 添加或修改已有spu -->
             <SpuForm ref="spu" v-show="scene==1" @changeScene="changeScene"></SpuForm>
             <!-- 添加sku -->
-            <SkuForm  v-show="scene==2"></SkuForm>
+            <SkuForm ref="sku" v-show="scene==2" @changeScene="changeScene"></SkuForm>
         </el-card>
     </div>
 </template>
@@ -62,6 +62,8 @@ let total =ref<number>(0)
 let records=ref<Records>([])
 // 获取spu子组件的实例对象
 let spu=ref<any>()
+// 获取sku子组件的实例对象
+let sku=ref<any>()
 // 获取已有spu
 const getHasSPU =async (pager=1)=>{
     // 根据点击的页码跳转到对应
@@ -110,6 +112,13 @@ watch(()=>catgoryStore.c3Id,()=>{
 onMounted(()=>{
     getHasSPU()
 })
+// 添加sku
+const addSku=(row:SpuData)=>{
+    // 切换场景
+    scene.value=2
+    // 在父组件调用子组件的方法
+    sku.value.initSkuData(catgoryStore.c1Id,catgoryStore.c2Id,catgoryStore.c3Id,row)
+}
 </script>
 
 <style scoped>

@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang='ts'>
-import { ref,computed, nextTick, reactive } from 'vue';
+import { ref,computed, nextTick } from 'vue';
 import type { AllTrademark, SaleAttrResponseData,SpuData, SpuImg,SpuHasImg,HasSaleAttrResponseData,Trademark, SaleAttr, HasSaleAttr, SaleAttrValue  } from '@/api/product/spu/type';
 import { reqAllTradeMark,reqSpuImage,reqSpuSaleAttr,reqAllSaleAttr,reqAddOrUpdateSpu } from '@/api/product/spu';
 import { ElMessage } from 'element-plus';
@@ -78,7 +78,7 @@ let imagList =ref<SpuImg[]>([])
 let saleAttr =ref<SaleAttr[]>([])
 let allSaleAttr=ref<HasSaleAttr[]>([])
 // 存储已有的spu对象
-let SpuParams=reactive<SpuData>({
+let SpuParams=ref<SpuData>({
     category3Id:'',//收集三级分类Id
     spuName:'',//spu名字
     description:'',//spu描述
@@ -100,7 +100,7 @@ const cancel=()=>{
 // 子组件的方法
 const initGetHasSpuData =async (spu:SpuData)=>{
     // 存储已有的spu对象
-    SpuParams=spu
+    SpuParams.value=spu
     // spu:父组件传来的已有spu对象
     // 获取全部的spu的商品数据
     let result:AllTrademark =await reqAllTradeMark()
@@ -229,28 +229,28 @@ const toLook=(row:SaleAttr)=>{
 const save=async ()=>{
     //整理参数
     // 1.照片墙的数据
-    SpuParams.spuImageList=imagList.value.map((item:any)=>{
+    SpuParams.value.spuImageList=imagList.value.map((item:any)=>{
         return {
             imgName:item.name,
             imgUrl:(item.response&&item.response.data)||item.url
         }
     })
     // 2.整理销售属性的数据
-    SpuParams.spuSaleAttrList=saleAttr.value
+    SpuParams.value.spuSaleAttrList=saleAttr.value
     //发请求：添加|修改
-    let result=await reqAddOrUpdateSpu(SpuParams)
+    let result=await reqAddOrUpdateSpu(SpuParams.value)
     if(result.code==200){
         //切换场景
-        $emit('changeScene',{flag:0,Params:SpuParams.id?'update':'add'})
+        $emit('changeScene',{flag:0,Params:SpuParams.value.id?'update':'add'})
         // 提示信息
         ElMessage({
             type:'success',
-            message:SpuParams.id?'修改成功':'添加成功'
+            message:SpuParams.value.id?'修改成功':'添加成功'
         })
     }else{
         ElMessage({
             type:'error',
-            message:SpuParams.id?'修改失败':'添加失败'
+            message:SpuParams.value.id?'修改失败':'添加失败'
         })
     }
 }
@@ -273,7 +273,7 @@ const initAddSpu=async (c3Id:number|string)=>{
     saleAttrIdAndValueName.value=''
     
     // 存储三级分类
-    SpuParams.category3Id=c3Id
+    SpuParams.value.category3Id=c3Id
     // 获取全部品牌
     let result:AllTrademark =await reqAllTradeMark()
     // 获取全部的销售属性

@@ -227,7 +227,7 @@ onMounted(()=>{
 // 当组件即将销毁的时候
 onBeforeUnmount(()=>{
     //清空catgoryStore仓库
-    catgoryStore.$reset()
+    // catgoryStore.$reset()
 })
 </script>
 
