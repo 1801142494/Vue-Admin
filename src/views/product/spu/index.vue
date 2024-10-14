@@ -17,7 +17,7 @@
                         <template #="{row,$index}">
                             <el-button type="primary" size="small" icon="Plus" title="添加SKU" @click="addSku(row)"></el-button>
                             <el-button type="primary" size="small" icon="Edit"  title="修改SPU" @click="updateSpu(row)"></el-button>
-                            <el-button type="primary" size="small" icon="View"  title="查看SPU" @click="findSku(row)"></el-button>
+                            <el-button type="primary" size="small" icon="View"  title="查看SKU" @click="findSku(row)"></el-button>
                             <el-popconfirm :title="`您确定要删除${row.spuName}?`" width="auto" icon="Delete" @confirm="deleteSpu(row)">
                                 <template #reference>
                                     <el-button type="primary" size="small" icon="Delete" title="删除SPU"></el-button>
@@ -150,13 +150,13 @@ const deleteSpu=async (row:SpuData)=>{
         ElMessage({
             type:'success',
             message:'删除SPU成功'
-            // 获取剩余spu
         })
+        // 获取剩余spu
         getHasSPU(records.value.length>1?pageNo.value:pageNo.value-1)
     }else{
         ElMessage({
             type:'error',
-             message:'删除SPU失败'
+            message:`删除SPU失败,${result.data}`
         })
     }
     
