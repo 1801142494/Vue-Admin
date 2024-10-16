@@ -17,49 +17,49 @@ import pinia from './store'
 import useUserStore from './store/modules/user'
 const userStore = useUserStore(pinia)
 
-// 全局前置守卫
-router.beforeEach(async (to: any, from: any, next: any) => {
-  // 修改浏览器标题
-  document.title = setting.title + '-' + to.meta.title
-  // 进度条
-  nprogress.start()
-  const token = userStore.token
-  const username = userStore.username
+// // 全局前置守卫
+// router.beforeEach(async (to: any, from: any, next: any) => {
+//   // 修改浏览器标题
+//   document.title = setting.title + '-' + to.meta.title
+//   // 进度条
+//   nprogress.start()
+//   const token = userStore.token
+//   const username = userStore.username
 
-  if (token) {
-    // 用户登录
-    if (to.path == '/login') {
-      next({ path: '/' })
-    } else {
-      // 判断是否有用户信息
-      if (username) {
-        next()
-      } else {
-        // 如果没用户信息，在路这里发送获取信息的请求再放行
-        try {
-          // 获取用户信息
-          await userStore.userInfo()
-          next()
-        } catch (error) {
-          console.log(error)
-          // token过期
-          // 用户手动修改token
+//   if (token) {
+//     // 用户登录
+//     if (to.path == '/login') {
+//       next({ path: '/' })
+//     } else {
+//       // 判断是否有用户信息
+//       if (username) {
+//         next()
+//       } else {
+//         // 如果没用户信息，在路这里发送获取信息的请求再放行
+//         try {
+//           // 获取用户信息
+//           await userStore.userInfo()
+//           next()
+//         } catch (error) {
+//           console.log(error)
+//           // token过期
+//           // 用户手动修改token
 
-          // 用户退出->清除相关数据
-          await userStore.userLogout()
-          next({ path: '/login', query: { redirect: to.path } })
-        }
-      }
-    }
-  } else {
-    // 用户未登录
-    if (to.path == '/login') {
-      next()
-    } else {
-      next({ path: '/login', query: { redirect: to.path } })
-    }
-  }
-})
+//           // 用户退出->清除相关数据
+//           await userStore.userLogout()
+//           next({ path: '/login', query: { redirect: to.path } })
+//         }
+//       }
+//     }
+//   } else {
+//     // 用户未登录
+//     if (to.path == '/login') {
+//       next()
+//     } else {
+//       next({ path: '/login', query: { redirect: to.path } })
+//     }
+//   }
+// })
 
 // 全局后置守卫
 router.afterEach(() => {
