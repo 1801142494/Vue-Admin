@@ -5,7 +5,7 @@
       <el-col :span="12" :xs="24">
         <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginForms">
             <h1>Hello</h1>
-            <h2>欢迎来到后台管理系统</h2>
+            <h2>{{ setting.title }}</h2>
             <el-form-item prop="username">
                 <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
             </el-form-item>
@@ -32,6 +32,8 @@
     import { ElNotification } from 'element-plus';
     // 引入获取当前时间的函数
     import { getTime } from '@/utils/time';
+    // 引入设置的标题和logo配置文件
+    import setting from '@/setting'
     // 路由对象
     let $route =useRoute()
     let useStore =useUserStore()

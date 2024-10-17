@@ -3,20 +3,20 @@
     <el-card style="height: 80px;">
         <el-form :inline="true" class="formSearch">
             <el-form-item label="用户名：">
-                <el-input placeholder="请你输入搜索用户名"></el-input>
+                <el-input placeholder="请你输入搜索用户名" v-model="keyword"></el-input>
             </el-form-item>
             <el-form-item >
-                <el-button type="primary" size="default" @click="">搜索</el-button>
-                <el-button type="primary" size="default" @click="">重置</el-button>
+                <el-button type="primary" size="default" :disabled="!keyword" @click="search">搜索</el-button>
+                <el-button type="primary" size="default" @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
     </el-card >
     <!-- 下方card--展示用户列表信息 -->
     <el-card style="margin: 10px 0px;">
         <el-button type="primary" size="default" @click="addUser">添加用户</el-button>
-        <el-button type="primary" size="default" @click="">批量删除</el-button>
+        <el-button type="primary" size="default" :disabled="!selectIdArr.length" @click="deleteUserList">批量删除</el-button>
         <!-- table展示用户信息 -->
-        <el-table border style="margin-top: 10px;" :data="userArr">
+        <el-table border style="margin-top: 10px;" :data="userArr" @selection-change="selectChange">
             <el-table-column type="selection" align="center"></el-table-column>
             <el-table-column label="#" align="center" type="index"></el-table-column>
             <el-table-column label="ID" align="center" prop="id"></el-table-column>
@@ -27,9 +27,13 @@
             <el-table-column label="更新时间" align="center" prop="updateTime" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" align="center" width="300px">
                 <template #="{row,$index}">
-                    <el-button type="primary" size="small" icon="User" @click="">分配角色</el-button>
+                    <el-button type="primary" size="small" icon="User" @click="setRole(row)">分配角色</el-button>
                     <el-button type="primary" size="small" icon="Edit" @click="updateUser(row)">编辑</el-button>
-                    <el-button type="primary" size="small" icon="Delete" @click="">删除</el-button>
+                    <el-popconfirm :title="`您确定要删除${row.username}?`" width="auto" icon="Delete" @confirm="deleteUser(row)">
+                        <template #reference>
+                            <el-button type="primary" size="small" icon="Delete">删除</el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>
@@ -43,8 +47,8 @@
             :total="total"
             @change="getAllUser"
         />
-         <!-- 抽屉组件-用于添加|更新 用户信息 -->
-         <el-drawer v-model="drawer">
+        <!-- 抽屉组件-用于添加|更新 用户信息 -->
+        <el-drawer v-model="drawer">
             <!-- 头部标签：文字内容动态显示 -->
             <template #header>
             <h4>{{userParams.id?'更新用户':'修改用户'}}</h4>
@@ -71,12 +75,50 @@
                 </div>
             </template>
         </el-drawer>
+        <!-- 抽屉组件-分配角色 -->
+        <el-drawer v-model="drawer1">
+            <!-- 头部标签：文字内容动态显示 -->
+            <template #header>
+            <h4>分配角色</h4>
+            </template>
+            <!-- 身体部分 -->
+            <template #default>
+                <el-form>
+                    <el-form-item label="用户姓名" >
+                        <el-input placeholder="请您输入用户姓名" v-model="userParams.username" disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色列表" >
+                        <el-checkbox
+                        v-model="checkAll"
+                        :indeterminate="isIndeterminate"
+                        @change="handleCheckAllChange"
+                        >全选</el-checkbox>
+                        <!-- 显示职职位的复选框 -->
+                        <el-checkbox-group v-model="userRole"
+                        @change="handleCheckedCitiesChange">
+                            <el-checkbox v-for="(role,index) in allRole" :key="index" :label="index" :value="role">
+                            {{ role.roleName }}
+                            </el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
+                </el-form>
+            </template>
+            <!-- 脚部分 -->
+            <template #footer>
+                <div style="flex: auto;">
+                    <el-button @click="cancel1">取消</el-button>
+                    <el-button type="primary" @click="save1">确定</el-button>
+                </div>
+            </template>
+        </el-drawer>
     </el-card>
 </template>
 
 <script setup lang='ts'>
-import { reqAddOrUpdateUser, reqUserList } from '@/api/acl/user';
-import { UserResponseData,Records, User } from '@/api/acl/user/type';
+// 引入仓库
+import useLayoutSettingStore from '@/store/modules/setting';
+import { reqAddOrUpdateUser, reqAllRole,reqDeleteUser,reqDeleteUserList,reqSetUserRole,reqUserList } from '@/api/acl/user';
+import { UserResponseData,Records, User, AllRole, SetRoleData } from '@/api/acl/user/type';
 import { ElMessage } from 'element-plus';
 import { ref,onMounted, reactive, nextTick } from 'vue';
 
@@ -88,7 +130,7 @@ let limit =ref<number>(5)
 let total =ref<number>(0)
 // 存储用户列表
 let userArr=ref<Records>([])
-// 抽屉组件的显示和隐藏
+// 抽屉组件-添加|修改用户信息的显示和隐藏
 let drawer = ref(false)
 // 收集添加的用户信息
 let userParams =reactive<User>({
@@ -98,6 +140,22 @@ let userParams =reactive<User>({
 })
 // 表单实例对象
 let formRef =ref<any>()
+// 抽屉组件-分配角色的显示和隐藏
+let drawer1 = ref(false)
+// 存储全部的职位
+let allRole =ref<AllRole>([])
+// 收集角色已有的职位信息
+let userRole=ref<any>([])
+// 角色分配抽屉复选框是否全选
+let checkAll = ref<boolean>(false)
+// 角色分配抽屉复选框不确定状态，仅负责样式控制
+let isIndeterminate = ref(true)
+// 批量删除的用户id数组
+let selectIdArr=ref<User[]>([])
+// 收集搜索框输入的文字
+let keyword =ref<string>('')
+// 获取模板setting仓库
+let settingStore = useLayoutSettingStore()
 // 自定义校验用户名字的回调函数
 let validatorUsername=(rule:any,value:any,callBack:any)=>{
     // 用户名字|昵称至少5位以上
@@ -138,7 +196,7 @@ let rules = {
 const getAllUser=async (pager=1)=>{
     // 收集当前页码
     pageNo.value=pager
-    let result:UserResponseData =await reqUserList(pageNo.value,limit.value)
+    let result:UserResponseData =await reqUserList(pageNo.value,limit.value,keyword.value)
     if(result.code==200){
         // 存储信息总数
         total.value=result.data.total
@@ -204,8 +262,130 @@ const save=async ()=>{
         })
     }
 }
-// 当挂载时的生命周期钩子
+// 分配角色按钮回调
+const setRole=async (row:User)=>{
+    // 存储已有数据
+    Object.assign(userParams,row)
+    // 发请求获取全部职位,已经角色已有职位
+    let result=await reqAllRole(row.id as number)
+    if(result.code==200){
+        //收集全部职位
+        allRole.value=result.data.allRolesList
+        // 收集角色已有职位
+        userRole.value=result.data.assignRoles
+         // 显示抽屉
+        drawer1.value=true
+    }
+}
+// 全选复选框change事件
+const handleCheckAllChange = (val: boolean) => {
+    // 如果全选为真，直接收集全部数据否则为空
+    userRole.value= val?allRole.value:[]
+    // 修改显示状态
+    isIndeterminate.value=false
+}
+// 底部复选框change事件
+const handleCheckedCitiesChange = (value: string[]) => {
+    //已经勾选的数据的长度
+    let checkedCount =value.length
+    checkAll.value=checkedCount===allRole.value.length
+    // 修改显示状态
+    isIndeterminate.value=checkedCount > 0 && checkedCount < allRole.value.length
+}
+// 角色分配抽屉的取消按钮
+const cancel1=()=>{
+    // 隐藏抽屉
+    drawer1.value=false
+}
+// 角色分配抽屉的保存按钮
+const save1=async()=>{
+    // 收集数据
+    let data:SetRoleData={
+        userId:userParams.id as number,
+        roleIdList:userRole.value.map( (item: any)=>{
+            return item.id as number
+        })
+    }
+    // 分配职位
+    let result =await reqSetUserRole(data)
+    if(result.code==200){
+        // 提示信息
+        ElMessage({
+            type:'success',
+            message:'分配职务成功'
+        })
+        // 隐藏抽屉
+        drawer1.value=false
+        // 更新数据
+        getAllUser(pageNo.value)
+    }else{
+        ElMessage({
+            type:'error',
+            message:`分配职务失败，${result.data}`
+        })
+    }
+}
+// 删除单个用户按钮
+const deleteUser=async(row:User)=>{
+    let result:any=await reqDeleteUser(row.id as number)
+    if(result.code==200){
+        // 提示信息
+        ElMessage({
+            type:'success',
+            message:'删除用户成功'
+        })
+        // 更新页面
+        getAllUser(userArr.value.length>1?pageNo.value:pageNo.value-1)
+    }else{
+        ElMessage({
+            type:'error',
+            message:`删除用户失败,${result.data}`
+        })
+    }
+}
+// table复选框点击触发的回调
+const selectChange=(val:any)=>{
+    //收集勾选的用户列表
+    selectIdArr.value=val
+}
+// 批量删除用户按钮
+const deleteUserList=async()=>{
+    // 整理批量删除的id
+    let idsList:any=selectIdArr.value.map(item=>{
+        return item.id
+    })
+    // 发请求
+    let result:any=await reqDeleteUserList(idsList)
+    if(result.code==200){
+        // 提示信息
+        ElMessage({
+            type:'success',
+            message:'批量删除用户成功'
+        })
+        // 更新页面
+        getAllUser(userArr.value.length>1?pageNo.value:pageNo.value-1)
+    }else{
+        ElMessage({
+            type:'error',
+            message:`批量删除用户失败,${result.data}`
+        })
+    }
+}
+// 搜索点击事件
+const search=()=>{
+    // 根据关键字搜索新用户列表
+    getAllUser()
+    // 清空关键字
+    keyword.value=''
+}
+// 重置按钮
+const reset=()=>{
+    // 通过setting仓库的refresh属性刷新
+    settingStore.refresh = !settingStore.refresh
+}
+// 当组件挂载时的生命周期钩子
 onMounted(()=>{
+    //获取用户列表数据
     getAllUser()
 })
 </script>
