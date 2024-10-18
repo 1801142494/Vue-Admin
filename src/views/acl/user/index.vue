@@ -7,7 +7,7 @@
             </el-form-item>
             <el-form-item >
                 <el-button type="primary" size="default" :disabled="!keyword" @click="search">搜索</el-button>
-                <el-button type="primary" size="default" @click="reset">重置</el-button>
+                <el-button size="default" @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
     </el-card >
@@ -212,7 +212,8 @@ const addUser=()=>{
     Object.assign(userParams,{
         username:'',
         name:'',
-        password:''
+        password:'',
+        id:0
     })
     // 清除上一次错误的表单验证信息
     nextTick(()=>{
