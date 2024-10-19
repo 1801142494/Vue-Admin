@@ -189,7 +189,7 @@ const save=async ()=>{
     //添加|更新职位请求
     let result= await reqAddOrUpdateRole(roleParams)
     if(result.code==200){
-        // 隐藏抽屉
+        // 隐藏对话框
         dialogVisite.value=false
         // 提示销售
         ElMessage({
