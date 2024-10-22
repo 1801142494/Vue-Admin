@@ -8,6 +8,8 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 引入模板的全局样式
 import './styles/index.scss'
+// 暗黑模式需要的样式
+import 'element-plus/theme-chalk/dark/css-vars.css'
 // svg插件需要配置的代码
 import 'virtual:svg-icons-register'
 // 引入自定义插件对象，注册整个项目全局组件
