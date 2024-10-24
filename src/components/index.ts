@@ -5,11 +5,11 @@ import Category from './Category/index.vue'
 // 引入ElementPlus的所有的图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 全局对象
-const allGlobalComponent:any = { SvgIcon, Pagination, Category }
+const allGlobalComponent: any = { SvgIcon, Pagination, Category }
 //对外暴露插件对象
 export default {
   install(app: any) {
-    Object.keys(allGlobalComponent).forEach(key => {
+    Object.keys(allGlobalComponent).forEach((key) => {
       app.component(key, allGlobalComponent[key])
     })
     // 注册ElementPlus的所有的图标为全局组件
