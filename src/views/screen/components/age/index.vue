@@ -5,9 +5,7 @@
             <img src="../../images/dataScreen-title.png" alt="">
         </div>
         <!-- 图形图表的容器 -->
-        <div class="charts" ref="charts">
-
-        </div>
+        <div class="charts" ref="charts"></div>
     </div>
 </template>
 
@@ -27,8 +25,8 @@ onMounted(()=>{
             trigger: 'item'
         },
         legend: {
-            top: 50,
-            right: 30,
+            top: 40,
+            right: 20,
             orient:'vertical',//图例组件方向
             textStyle:{
                 color:'while',
@@ -43,13 +41,11 @@ onMounted(()=>{
             avoidLabelOverlap: false,
             itemStyle: {
                 borderRadius: 10,
-                borderColor: '#fff',
-                borderWidth: 2
             },
             label: {
                 show: true,
                 position: 'inside',//饼图数据显示位置
-                color:'white'
+                formatter:'{d}%'
             },
             labelLine: {
                 show: false
@@ -64,13 +60,6 @@ onMounted(()=>{
             ],
             }
         ],
-        // 调整图形图标的位置
-        grid:{
-            left:75,
-            right:75,
-            top:0,
-            bottom:20
-        },
     };
     myCharts.setOption(option)
     

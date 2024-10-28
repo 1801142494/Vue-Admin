@@ -15,7 +15,10 @@
                     <Age class="age"></Age>
                 </div>
                 <!-- 底部中间区域 -->
-                <div class="center">中间</div>
+                <div class="center">
+                    <Map class="map"></Map>
+                    <Line class="line"></Line>
+                </div>
                 <!-- 底部右侧区域 -->
                 <div class="right">右侧</div>
             </div>
@@ -25,11 +28,15 @@
 
 <script setup lang='ts'>
 import { ref,onMounted } from 'vue';
-// 引入子组件
+// 引入顶部子组件
 import Top from './components/top/index.vue'
+// 引入左侧三个子组件
 import Tourist from './components/tourist/index.vue'
 import Sex from './components/sex/index.vue'
 import Age from './components/age/index.vue'
+// 引入中间子组件
+import Map from './components/map/index.vue'
+import Line from './components/line/index.vue'
 
 // 获取数据大屏内容展示区的元素
 let screen=ref<any>()
@@ -86,6 +93,14 @@ window.onresize=()=>{
             }
             .center{
                 flex: 2;
+                display: flex;
+                flex-direction: column;
+                .map{
+                    flex: 3;
+                }
+                .line{
+                    flex: 1;
+                }
             }
             .right{
                 flex: 1;
