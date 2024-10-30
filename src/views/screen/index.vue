@@ -20,7 +20,11 @@
                     <Line class="line"></Line>
                 </div>
                 <!-- 底部右侧区域 -->
-                <div class="right">右侧</div>
+                <div class="right">
+                    <Rank class="rank"></Rank>
+                    <Year class="year"></Year>
+                    <Counter class="counter"></Counter>
+                </div>
             </div>
         </div>
     </div>
@@ -37,12 +41,18 @@ import Age from './components/age/index.vue'
 // 引入中间子组件
 import Map from './components/map/index.vue'
 import Line from './components/line/index.vue'
+// 引入右侧三个子组件
+import Rank from './components/rank/index.vue'
+import Year from './components/year/index.vue'
+import Counter from './components/counter/index.vue'
 
 // 获取数据大屏内容展示区的元素
 let screen=ref<any>()
 // 组件挂载时的生命周期钩子
 onMounted(()=>{
     // 控制screen的大小
+    console.log(111);
+    
     screen.value.style.transform=`scale(${getScale()}) translate(-50%,-50%)`
 })
 // 定义大屏缩放比例
@@ -104,6 +114,17 @@ window.onresize=()=>{
             }
             .right{
                 flex: 1;
+                display: flex;
+                flex-direction: column;
+                .rank{
+                    flex: 1;
+                }
+                .year{
+                    flex: 1;
+                }
+                .counter{
+                    flex: 1.2;
+                }
             }
         }
     }

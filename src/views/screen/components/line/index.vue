@@ -59,7 +59,7 @@ onMounted(()=>{
         // 布局组件
         grid:{
             left:40,
-            right:10,
+            right:20,
             top:40,
             bottom:20
         },
@@ -93,7 +93,7 @@ onMounted(()=>{
 
 <style scoped lang="scss">
 .box{
-    width: 100%;
+    width: calc(100% - 60px);
     height: 100%;
     background: url('../../images/dataScreen-main-cb.png') no-repeat;
     background-size: 100% 100%;

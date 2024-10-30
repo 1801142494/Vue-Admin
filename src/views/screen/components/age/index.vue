@@ -70,9 +70,8 @@ onMounted(()=>{
 .box{
     width: 100%;
     height: 100%;
-    background:url('../../images//dataScreen-main-cb.png') no-repeat;
+    background:url('../../images//dataScreen-main-lb.png') no-repeat;
     background-size: 100% 100%;
-    margin: 20px 0px;
     .title{
         margin-left: 20px;
         p{
