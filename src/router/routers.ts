@@ -1,4 +1,4 @@
-//对外暴露配置路由（常量路由）
+//常量路由：任何人都有的路由(login,首页，404，数据大屏)
 export const constantRoute = [
   {
     // 登录
@@ -44,6 +44,21 @@ export const constantRoute = [
       icon: 'Platform',
     },
   },
+  {
+    // 404页面
+    name: '404',
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    meta: {
+      title: '404',
+      hidden: true,
+      icon: 'WarnTriangleFilled',
+    },
+  },
+ 
+]
+// 异步路由：有的人有这个路由有的人没有（商品管理，用户管理）
+export const asnycRoute =[
   {
     name: 'Acl',
     path: '/acl',
@@ -140,18 +155,10 @@ export const constantRoute = [
       },
     ],
   },
-  {
-    // 404页面
-    name: '404',
-    path: '/404',
-    component: () => import('@/views/404/index.vue'),
-    meta: {
-      title: '404',
-      hidden: true,
-      icon: 'WarnTriangleFilled',
-    },
-  },
-  {
+]
+// 任意路由
+export const anyRoute =[
+ {
     // 任意路由，上面都没匹配到
     name: 'Any',
     path: '/:pathMatch(.*)*', //特殊的路由配置，用于捕获任意路径并进行路由重定向

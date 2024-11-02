@@ -7,6 +7,7 @@
 import router from '@/router'
 import setting from './setting'
 // 引入进度条
+//@ts-ignore
 import nprogress from 'nprogress'
 nprogress.configure({ showSpinner: false })
 // 引入进度条样式
@@ -39,7 +40,10 @@ router.beforeEach(async (to: any, from: any, next: any) => {
         try {
           // 获取用户信息
           await userStore.userInfo()
-          next()
+          // 放行
+          // 注：刷新时如果是异步路由，可能获取用户信息时路由还没加载完，导致刷新空白页
+          // 通过{...to}解决，路由加载完毕后才会执行
+          next({...to})
         } catch (error) {
           console.log(error)
           // token过期

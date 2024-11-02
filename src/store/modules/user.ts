@@ -8,7 +8,26 @@ import type { UserState } from './types/type'
 // 引入操作本地存储的工具方法
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由
-import { constantRoute } from '@/router/routers'
+import { constantRoute,asnycRoute,anyRoute } from '@/router/routers'
+import router from '@/router'
+// 引入lodash插件用于深拷贝(引入的是js文件没有)
+//@ts-ignore
+import cloneDeep from 'lodash/cloneDeep'
+
+// 用于过滤当前用户需要展示的异步路由
+function filterAsyncRoute(asnycRoute:any,routes:any){
+  return asnycRoute.filter((item:any)=>{
+    // 如果routes包含asnycRoute继续
+    if(routes.includes(item.name)){
+      // 如果还有子路由，且子路由大于0个，进行递归
+      if(item.children && item.children.length>0){
+        filterAsyncRoute(item.children,routes)
+      }
+      return true
+    }
+  })
+}
+
 // 创建小仓库
 const useUserStore = defineStore('User', {
   //小仓库存储数据的地方
@@ -20,11 +39,11 @@ const useUserStore = defineStore('User', {
       avatar: '',
     }
   },
+  // 异步|逻辑的地方
   actions: {
     // 用户登录的方法 async异步修饰将返回promise对象
     async userLogin(data: loginFormData) {
       const result: loginResponseData = await reqLogin(data)
-      console.log(result)
       // 请求成功
       if (result.code == 200) {
         // pinia仓库存储token
@@ -45,6 +64,16 @@ const useUserStore = defineStore('User', {
       if (result.code == 200) {
         this.username = result.data.name
         this.avatar = result.data.avatar
+        // 计算当前用户需要展示的异步路由
+        let userAsyncRoute= filterAsyncRoute(cloneDeep(asnycRoute),result.data.routes)
+        // 重新给存储的路由赋值
+        this.menuRoutes = [...constantRoute,...userAsyncRoute,...anyRoute]
+        // 追加注册路由
+        let addRouters =[...userAsyncRoute,...anyRoute]
+        console.log(this.menuRoutes);
+        addRouters.forEach((route:any)=>{
+          router.addRoute(route)
+        })
         return 'ok'
       } else {
         return Promise.reject(new Error(result.message))
