@@ -13,7 +13,7 @@
     </el-card >
     <!-- 下方card--展示用户列表信息 -->
     <el-card style="margin: 10px 0px;">
-        <el-button type="primary" size="default" @click="addUser">添加用户</el-button>
+        <el-button type="primary" size="default" @click="addUser" v-has="'btn.User.add'">添加用户</el-button>
         <el-button type="primary" size="default" :disabled="!selectIdArr.length" @click="deleteUserList">批量删除</el-button>
         <!-- table展示用户信息 -->
         <el-table border style="margin-top: 10px;" :data="userArr" @selection-change="selectChange">
@@ -27,11 +27,11 @@
             <el-table-column label="更新时间" align="center" prop="updateTime" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" align="center" width="300px">
                 <template #="{row,$index}">
-                    <el-button type="primary" size="small" icon="User" @click="setRole(row)">分配角色</el-button>
-                    <el-button type="primary" size="small" icon="Edit" @click="updateUser(row)">编辑</el-button>
+                    <el-button type="primary" size="small" icon="User" @click="setRole(row)" v-has="'btn.User.assgin'">分配角色</el-button>
+                    <el-button type="primary" size="small" icon="Edit" @click="updateUser(row)" v-has="'btn.User.update'">编辑</el-button>
                     <el-popconfirm :title="`您确定要删除${row.username}?`" width="auto" icon="Delete" @confirm="deleteUser(row)">
                         <template #reference>
-                            <el-button type="primary" size="small" icon="Delete">删除</el-button>
+                            <el-button type="primary" size="small" icon="Delete" v-has="'btn.User.remove'">删除</el-button>
                         </template>
                     </el-popconfirm>
                 </template>

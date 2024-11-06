@@ -21,7 +21,7 @@ function filterAsyncRoute(asnycRoute:any,routes:any){
     if(routes.includes(item.name)){
       // 如果还有子路由，且子路由大于0个，进行递归
       if(item.children && item.children.length>0){
-        filterAsyncRoute(item.children,routes)
+        item.children=filterAsyncRoute(item.children,routes)
       }
       return true
     }
@@ -37,6 +37,7 @@ const useUserStore = defineStore('User', {
       menuRoutes: constantRoute, //仓库存储生成菜单需要数组（路由）
       username: '',
       avatar: '',
+      buttons:[],//存储用户可访问按钮的权限
     }
   },
   // 异步|逻辑的地方
@@ -64,13 +65,13 @@ const useUserStore = defineStore('User', {
       if (result.code == 200) {
         this.username = result.data.name
         this.avatar = result.data.avatar
+        this.buttons =result.data.buttons
         // 计算当前用户需要展示的异步路由
         let userAsyncRoute= filterAsyncRoute(cloneDeep(asnycRoute),result.data.routes)
         // 重新给存储的路由赋值
         this.menuRoutes = [...constantRoute,...userAsyncRoute,...anyRoute]
         // 追加注册路由
         let addRouters =[...userAsyncRoute,...anyRoute]
-        console.log(this.menuRoutes);
         addRouters.forEach((route:any)=>{
           router.addRoute(route)
         })

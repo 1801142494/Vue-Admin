@@ -13,7 +13,7 @@
     </el-card>
     <!-- 下方card---添加和展示职位列表 -->
     <el-card style="margin: 10px 0px;">
-        <el-button type="primary" size="default" icon="Plus" @click="addRole">添加角色</el-button>
+        <el-button type="primary" size="default" icon="Plus" @click="addRole" v-has="'btn.Role.add'">添加角色</el-button>
         <!-- 展示职位列表 -->
         <el-table border style="margin: 10px 0px;" :data="roleArr">
             <el-table-column type="index" align="center" label="#"></el-table-column>
@@ -23,11 +23,11 @@
             <el-table-column label="更新时间" align="center" prop="updateTime" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" width="280px" align="center">
                 <template #="{row,$index}">
-                    <el-button type="primary" size="small" icon="User" @click="setPermission(row)">分配权限</el-button>
-                    <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)">编辑</el-button>
+                    <el-button type="primary" size="small" icon="User" @click="setPermission(row)" v-has="'btn.Role.assgin'">分配权限</el-button>
+                    <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)" v-has="'btn.Role.update'">编辑</el-button>
                     <el-popconfirm :title="`您确定要删除${row.roleName}?`" width="auto" icon="Delete" @confirm="deleteRole(row)">
                         <template #reference>
-                            <el-button type="primary" size="small" icon="Delete">删除</el-button>
+                            <el-button type="primary" size="small" icon="Delete" v-has="'btn.Role.remove'">删除</el-button>
                         </template>
                     </el-popconfirm>
                 </template>
@@ -253,7 +253,7 @@ const handler=async ()=>{
         // 提示信息
         ElMessage({
             type:'success',
-            message:'分配职务成功'
+            message:'分配权限成功'
         })
         // 隐藏抽屉
         drawer.value=false
@@ -262,7 +262,7 @@ const handler=async ()=>{
     }else{
         ElMessage({
             type:'error',
-            message:`分配职务失败，${result.data}`
+            message:`分配权限失败，${result.data}`
         })
     }
 }

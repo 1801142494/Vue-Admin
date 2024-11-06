@@ -45,10 +45,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
           // 通过{...to}解决，路由加载完毕后才会执行
           next({...to})
         } catch (error) {
-          console.log(error)
           // token过期
           // 用户手动修改token
-
           // 用户退出->清除相关数据
           await userStore.userLogout()
           next({ path: '/login', query: { redirect: to.path } })

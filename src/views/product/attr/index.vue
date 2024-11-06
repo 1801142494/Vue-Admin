@@ -6,7 +6,7 @@
         <template v-if="!scene">
             <el-card style="margin-top: 10px;">
             <!-- 当3级分类存在，才可以操作添加 -->
-            <el-button type="primary" size="default" @click="addAttr" :disabled="!catgoryStore.c3Id">添加属性</el-button>
+            <el-button type="primary" size="default" @click="addAttr" :disabled="!catgoryStore.c3Id" v-has="'btn.Attr.add'">添加属性</el-button>
             <el-table border style="margin: 10px 0px;" :data="attrArr">
                 <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
                 <el-table-column label="属性名称" width="120px" prop="attrName"></el-table-column>
@@ -19,10 +19,10 @@
                 </el-table-column>
                 <el-table-column label="操作" width="120px">
                     <template #="{row,$index}">
-                        <el-button type="primary" size="small" icon="Edit" title="编辑" @click="updateAttr(row)"></el-button>
+                        <el-button type="primary" size="small" icon="Edit" title="编辑" @click="updateAttr(row)" v-has="'btn.Attr.update'"></el-button>
                         <el-popconfirm :title="`您确定要删除${row.attrName}?`" width="auto" icon="Delete" @confirm="deleteAttr(row)">
                             <template #reference>
-                                <el-button type="primary" size="small" icon="Delete" title="删除"></el-button>
+                                <el-button type="primary" size="small" icon="Delete" title="删除" v-has="'btn.Attr.remove'"></el-button>
                             </template>
                         </el-popconfirm>
                     </template>
