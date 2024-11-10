@@ -32,6 +32,8 @@ request.interceptors.response.use(
     //失败回调，处理http网络错误
     let message = ''
     const status = error.response.status
+    console.log(status)
+
     switch (status) {
       case 401:
         message = 'TOKEN过期'

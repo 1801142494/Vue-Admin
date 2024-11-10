@@ -61,7 +61,7 @@ onMounted(()=>{
             left:40,
             right:20,
             top:40,
-            bottom:20
+            bottom:24
         },
         series:[
             {

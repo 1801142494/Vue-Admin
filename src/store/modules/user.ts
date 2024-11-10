@@ -8,20 +8,19 @@ import type { UserState } from './types/type'
 // 引入操作本地存储的工具方法
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由
-import { constantRoute,asnycRoute,anyRoute } from '@/router/routers'
+import { constantRoute, asnycRoute, anyRoute } from '@/router/routers'
 import router from '@/router'
 // 引入lodash插件用于深拷贝(引入的是js文件没有)
-//@ts-ignore
 import cloneDeep from 'lodash/cloneDeep'
 
 // 用于过滤当前用户需要展示的异步路由
-function filterAsyncRoute(asnycRoute:any,routes:any){
-  return asnycRoute.filter((item:any)=>{
+function filterAsyncRoute(asnycRoute: any, routes: any) {
+  return asnycRoute.filter((item: any) => {
     // 如果routes包含asnycRoute继续
-    if(routes.includes(item.name)){
+    if (routes.includes(item.name)) {
       // 如果还有子路由，且子路由大于0个，进行递归
-      if(item.children && item.children.length>0){
-        item.children=filterAsyncRoute(item.children,routes)
+      if (item.children && item.children.length > 0) {
+        item.children = filterAsyncRoute(item.children, routes)
       }
       return true
     }
@@ -37,7 +36,7 @@ const useUserStore = defineStore('User', {
       menuRoutes: constantRoute, //仓库存储生成菜单需要数组（路由）
       username: '',
       avatar: '',
-      buttons:[],//存储用户可访问按钮的权限
+      buttons: [], //存储用户可访问按钮的权限
     }
   },
   // 异步|逻辑的地方
@@ -65,14 +64,17 @@ const useUserStore = defineStore('User', {
       if (result.code == 200) {
         this.username = result.data.name
         this.avatar = result.data.avatar
-        this.buttons =result.data.buttons
+        this.buttons = result.data.buttons
         // 计算当前用户需要展示的异步路由
-        let userAsyncRoute= filterAsyncRoute(cloneDeep(asnycRoute),result.data.routes)
+        const userAsyncRoute = filterAsyncRoute(
+          cloneDeep(asnycRoute),
+          result.data.routes,
+        )
         // 重新给存储的路由赋值
-        this.menuRoutes = [...constantRoute,...userAsyncRoute,...anyRoute]
+        this.menuRoutes = [...constantRoute, ...userAsyncRoute, ...anyRoute]
         // 追加注册路由
-        let addRouters =[...userAsyncRoute,...anyRoute]
-        addRouters.forEach((route:any)=>{
+        const addRouters = [...userAsyncRoute, ...anyRoute]
+        addRouters.forEach((route: any) => {
           router.addRoute(route)
         })
         return 'ok'

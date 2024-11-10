@@ -51,8 +51,6 @@ let screen=ref<any>()
 // 组件挂载时的生命周期钩子
 onMounted(()=>{
     // 控制screen的大小
-    console.log(111);
-    
     screen.value.style.transform=`scale(${getScale()}) translate(-50%,-50%)`
 })
 // 定义大屏缩放比例

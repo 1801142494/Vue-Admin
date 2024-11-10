@@ -1,7 +1,7 @@
 <template>
     <div class="layout_container">
         <!-- 左侧菜单 -->
-        <div class="layout_slider">
+        <div class="layout_slider" :class="{fold:LayoutSettingStore.fold}">
             <Logo></Logo>
             <!-- 展示菜单 -->
             <!-- 滚动组件 -->
@@ -70,6 +70,10 @@ const $route=useRoute();
                     border-right: none;
                 }
             }
+            //当菜单折叠，缩小左侧菜单宽度
+            &.fold{
+                width: $base-menu-min-width;
+            }
         }
         .layout_tabbar{
             position: fixed;
@@ -79,6 +83,7 @@ const $route=useRoute();
             height: $base-tabbar-height;
             transition: all 0.3s;
 
+            //当菜单折叠，改变当前布局
             &.fold{
                 width: calc(100% - $base-menu-min-width);
                 left: $base-menu-min-width;
@@ -93,7 +98,7 @@ const $route=useRoute();
             padding: 20px;
             overflow: auto;
             transition: all 0.3s;
-
+            //当菜单折叠，改变当前布局
             &.fold{
                 width: calc(100% - $base-menu-min-width);
                 left: $base-menu-min-width;

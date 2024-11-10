@@ -1,13 +1,16 @@
 <template>
     <div class="logo" v-if="setting.logoHidden">
-        <img :src="setting.logo" alt="logo">
-        <p>{{setting.title}}</p>
+        <img src="@/assets/icons/vite.svg" alt="logo">
+        <p :class="{fold:LayoutSettingStore.fold}">{{setting.title}}</p>
     </div>
 </template>
 
 <script setup lang='ts'>
 // 引入设置的标题和logo配置文件
 import setting from '@/setting'
+import useLayoutSettingStore from '@/store/modules/setting';
+// 获取layout配置相关的仓库
+let LayoutSettingStore=useLayoutSettingStore()
 </script>
 
 <script lang="ts">
@@ -31,6 +34,9 @@ export default {
         p{
             font-size: $base-menu-logo-size;
             margin-left: 10px;
+            &.fold{
+                display: none;//当菜单折叠，隐藏文字
+            }
         }
     }
 </style>

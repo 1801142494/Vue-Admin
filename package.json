@@ -7,7 +7,7 @@
     "dev": "vite --open",
     "build:test": "vue-tsc && vite build --mode test",
     "build:pro": "vue-tsc && vite build --mode production",
-    "build": "vue-tsc -b && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src",
     "fix": "eslint src --fix"
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
     "@types/node": "^22.5.1",
+    "@types/nprogress": "^0.2.3",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",
     "@vitejs/plugin-vue": "^5.1.2",

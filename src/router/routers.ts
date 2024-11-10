@@ -55,10 +55,9 @@ export const constantRoute = [
       icon: 'WarnTriangleFilled',
     },
   },
- 
 ]
 // 异步路由：有的人有这个路由有的人没有（商品管理，用户管理）
-export const asnycRoute =[
+export const asnycRoute = [
   {
     name: 'Acl',
     path: '/acl',
@@ -157,8 +156,8 @@ export const asnycRoute =[
   },
 ]
 // 任意路由
-export const anyRoute =[
- {
+export const anyRoute = [
+  {
     // 任意路由，上面都没匹配到
     name: 'Any',
     path: '/:pathMatch(.*)*', //特殊的路由配置，用于捕获任意路径并进行路由重定向
